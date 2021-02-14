@@ -8,8 +8,11 @@ const schema = Joi.object({
     mail: Joi.string().email()
 });
 
+// * Receives an user and validates him, aborts the operation with the first wrong parameter
 function validateUser(user) {
-    return schema.validateAsync(user);
+    return schema.validate(user, {
+        abortEarly: true
+    });
 }
 
 module.exports = validateUser;

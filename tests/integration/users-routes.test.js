@@ -99,11 +99,12 @@ describe('route: /users', () => {
 
             const response = await request(server).put(`/users/${user.username}`).send(getReqBody("Changed"));
 
-            // * CHecks for the status and if the body has the property n and nModified, both with
-            // * the value of: 1
+            // * Checks for the status and if the body has the properties username, firstName and lastName
+            // * with the updated values
             expect(response.status).toBe(200);
-            expect(response.body).toHaveProperty("n", 1);
-            expect(response.body).toHaveProperty("nModified", 1);
+            expect(response.body).toHaveProperty("username", "usernameChanged");
+            expect(response.body).toHaveProperty("firstName", "firstNameChanged");
+            expect(response.body).toHaveProperty("lastName", "lastNameChanged");
         });
     });
 
@@ -116,11 +117,9 @@ describe('route: /users', () => {
 
             const response = await request(server).delete('/users/username');
 
-            // * CHecks for the status and if the body has the property n and deletedCount, both with
-            // * the value of: 1
+            // * CHecks for the status and if the body has the username that was used to delete the user
             expect(response.status).toBe(200);
-            expect(response.body).toHaveProperty("n", 1);
-            expect(response.body).toHaveProperty("deletedCount", 1);
+            expect(response.body).toHaveProperty("username", user.username);
         });
     });
 });
