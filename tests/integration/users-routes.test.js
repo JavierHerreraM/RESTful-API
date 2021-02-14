@@ -35,7 +35,7 @@ function getReqBody(p1, p2) {
 }
 
 // * All the tests for the route: /users
-describe('route: /users', () => {
+describe('Route: /users', () => {
     // * Connects with the db
     beforeEach( () => { server = require('../../server'); });
 
@@ -49,7 +49,8 @@ describe('route: /users', () => {
     // * route   GET /users
     describe('GET /users', () => {
         it('should return all users', async () => {
-            await Users.collection.insertMany(getReqBody(1, 2));
+            // * Creates the users
+            await Users.collection.insertMany(getReqBody(1, 2))
 
             const response = await request(server).get('/users');
 
@@ -58,7 +59,15 @@ describe('route: /users', () => {
             expect(response.body.length).toBe(2);
             expect(response.body.some(user => user.username === 'username1')).toBeTruthy();
             expect(response.body.some(user => user.username === 'username2')).toBeTruthy();
-        })
+        });
+        
+        it('should return 404 if no user is found', async () => {
+            // * Deletes the users previously created so the collection be empty for the test
+            await Users.deleteMany({});
+            const response = await request(server).get('/users');
+
+            expect(response.status).toBe(404);
+        });
     });
 
     // * desc    shows one user
@@ -74,6 +83,12 @@ describe('route: /users', () => {
             expect(response.status).toBe(200);
             expect(response.body.username).toBe(user.username);
         })
+
+        it('should return 404 if no user is found with the given username', async () => {
+            const response = await request(server).get(`/users/invalidUsername`);
+
+            expect(response.status).toBe(404);
+        });
     });
 
     // * desc    creates a user
@@ -87,6 +102,22 @@ describe('route: /users', () => {
             expect(response.body).toHaveProperty("username");
             expect(response.body).toHaveProperty("firstName");
             expect(response.body).toHaveProperty("lastName");
+        });
+
+        it('should return a 400 if an incorrect body is passed', async () => {
+            const response = await request(server).post('/users').send({"input": "invalid"});
+
+            expect(response.status).toBe(400);
+        });
+
+        it('should return a 400 if the username already exist', async () => {
+            // * Creates a user so it matches the username when it tries to post a new one
+            const user = new Users(getReqBody());
+            await user.save();
+
+            const response = await request(server).post('/users').send(getReqBody());
+
+            expect(response.status).toBe(400);
         });
     });
 
@@ -106,6 +137,18 @@ describe('route: /users', () => {
             expect(response.body).toHaveProperty("firstName", "firstNameChanged");
             expect(response.body).toHaveProperty("lastName", "lastNameChanged");
         });
+
+        it('should return a 400 if an incorrect body is passed', async () => {
+            const response = await request(server).put(`/users/username`).send({"input": "invalid"});
+
+            expect(response.status).toBe(400);
+        });
+
+        it('should return 404 if no user is found with the given username', async () => {
+            const response = await request(server).put(`/users/invalidUsername`).send(getReqBody("Changed"));
+
+            expect(response.status).toBe(404);
+        });         
     });
 
     // * desc    deletes a user
@@ -120,6 +163,12 @@ describe('route: /users', () => {
             // * CHecks for the status and if the body has the username that was used to delete the user
             expect(response.status).toBe(200);
             expect(response.body).toHaveProperty("username", user.username);
+        });
+
+        it('should return 404 if no user is found with the given username', async () => {
+            const response = await request(server).delete(`/users/invalidUsername`);
+
+            expect(response.status).toBe(404);
         });
     });
 });

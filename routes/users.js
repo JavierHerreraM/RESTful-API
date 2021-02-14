@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     const users = await User.find().lean();
 
     // * Checks if there is no user in the db
-    if(users.length === 0) res.status(404).send('No user was found')
+    if(users.length === 0) return res.status(404).send('No user was found');
 
     res.status(200).send(users);
 });
@@ -20,7 +20,7 @@ router.get('/:username', async (req, res) => {
     const user = await User.findOne({username: req.params.username}).lean();
 
     // * Checks if there is no user
-    if(!user) res.status(404).send(`The user ${req.params.username} was not found.`);
+    if(!user) return res.status(404).send(`The user ${req.params.username} was not found.`);
 
     res.status(200).send(user);
 });
@@ -56,7 +56,7 @@ router.put('/:username', async (req, res) => {
     ).lean();
 
     // * Checks if no user was found
-    if(!updatedUser) res.status(404).send(`The user ${req.params.username} was not found.`);
+    if(!updatedUser) return res.status(404).send(`The user ${req.params.username} was not found.`);
 
     res.status(200).send(updatedUser);
 });
@@ -67,7 +67,7 @@ router.delete('/:username', async (req, res) => {
     const deletedUser = await User.findOneAndDelete({username: req.params.username});
 
     // * Checks if no user was found
-    if(!deletedUser) res.status(404).send(`The user ${req.params.username} was not found.`);
+    if(!deletedUser) return res.status(404).send(`The user ${req.params.username} was not found.`);
 
     res.status(200).send(deletedUser);
 });
