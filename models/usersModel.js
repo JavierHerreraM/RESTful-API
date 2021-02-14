@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// * It requires the username, firstName and lastName, they also have a minLength
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
