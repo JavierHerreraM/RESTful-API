@@ -7,10 +7,7 @@ const validateUsers = require('../validation/usersValidation');
 // * route   GET /users
 router.get('/', async (req, res) => {
     const users = await User.find().lean();
-
-    // * Checks if there is no user in the db
-    if(users.length === 0) return res.status(404).send('No user was found');
-
+    
     res.status(200).send(users);
 });
 

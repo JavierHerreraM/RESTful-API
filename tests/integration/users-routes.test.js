@@ -50,7 +50,7 @@ describe('Route: /users', () => {
     describe('GET /users', () => {
         it('should return all users', async () => {
             // * Creates the users
-            await Users.collection.insertMany(getReqBody(1, 2))
+            await Users.collection.insertMany(getReqBody(1, 2));
 
             const response = await request(server).get('/users');
 
@@ -59,14 +59,6 @@ describe('Route: /users', () => {
             expect(response.body.length).toBe(2);
             expect(response.body.some(user => user.username === 'username1')).toBeTruthy();
             expect(response.body.some(user => user.username === 'username2')).toBeTruthy();
-        });
-        
-        it('should return 404 if no user is found', async () => {
-            // * Deletes the users previously created so the collection be empty for the test
-            await Users.deleteMany({});
-            const response = await request(server).get('/users');
-
-            expect(response.status).toBe(404);
         });
     });
 

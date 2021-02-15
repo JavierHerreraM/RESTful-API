@@ -1,26 +1,49 @@
 require('express-async-errors');
-const path = require('path');
+const winston = require('winston');
+require('winston-mongodb');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const express = require('express');
 const bodyParser = require('body-parser');
-const errors = require('./errorHandling/errors');
+const errors = require('./error-handling/errors');
 
-// Load config
+// * Load config
 dotenv.config({ path: './config/.env' })
 
-// connect to the database
+// * Add winston transporters for mongoDB, file(in case of ENV=production) and console for all ENV
+if(process.env.NODE_ENV === 'production') {
+    winston.add(new winston.transports.MongoDB({
+        db: process.env.MONGO_URI,
+        options: { useUnifiedTopology: true },
+        handleExceptions: true,
+        handleRejections: true
+    }));
+    winston.add(new winston.transports.File({
+        filename: './error-handling/logfile.log',
+        handleExceptions: true,
+        handleRejections: true
+      }));
+}
+winston.add(new winston.transports.Console({
+    format: winston.format.simple(),
+    handleExceptions: true,
+    handleRejections: true
+}));
+
+// * connect to the database
 connectDB();
 
 const app = express();
 
+// * middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(require('./middleware/checkDB'));
 
-// routes
+// * routes
 app.use('/users', require('./routes/users'));
 
-//error handling
+// *error handling
 app.use(errors);
 
 const PORT  = process.env.PORT || 5000;
