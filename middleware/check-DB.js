@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const Users = require('../models/usersModel');
+const Users = require('../models/users-model');
 
 module.exports = async (req, res, next) => {
+
     // * Checks if the collection is empty, if it IS empty it creates 10 generic users
     const users = await Users.find().lean();
     if(users.length === 0) {

@@ -1,9 +1,9 @@
-require('express-async-errors');
+const dotenv = require('dotenv');
 const winston = require('winston');
 require('winston-mongodb');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+require('express-async-errors');
 const express = require('express');
+const connectDB = require('./config/db');
 const bodyParser = require('body-parser');
 const errors = require('./error-handling/errors');
 
@@ -38,7 +38,7 @@ const app = express();
 // * middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(require('./middleware/checkDB'));
+app.use(require('./middleware/check-DB'));
 
 // * routes
 app.use('/users', require('./routes/users'));

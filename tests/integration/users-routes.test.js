@@ -1,8 +1,8 @@
 const request = require('supertest');
-const Users = require('../../models/usersModel');
+const Users = require('../../models/users-model');
 let server;
 
-// * it can take up to two parameters depending on the operation
+// * getReqBody can take up to two parameters depending on the operation
 // * this way it can vary the input of the operation, in case it doesn't
 // * get any param it returns the normal object
 function getReqBody(p1, p2) {
@@ -74,7 +74,7 @@ describe('Route: /users', () => {
             // * Checks for the status and if the username is the same from the one that was saved
             expect(response.status).toBe(200);
             expect(response.body.username).toBe(user.username);
-        })
+        });
 
         it('should return 404 if no user is found with the given username', async () => {
             const response = await request(server).get(`/users/invalidUsername`);

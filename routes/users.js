@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/usersModel');
-const validateUsers = require('../validation/usersValidation');
+const Users = require('../models/users-model');
+const validateUsers = require('../validation/users-validation');
 
 // * desc    shows all users
 // * route   GET /users
 router.get('/', async (req, res) => {
-    const users = await User.find().lean();
-    
+    const users = await Users.find().lean();
+
     res.status(200).send(users);
 });
 
 // * desc    shows one user
 // * route   GET /users/:username
 router.get('/:username', async (req, res) => {
-    const user = await User.findOne({username: req.params.username}).lean();
+    const user = await Users.findOne({username: req.params.username}).lean();
 
     // * Checks if there is no user
     if(!user) return res.status(404).send(`The user ${req.params.username} was not found.`);
@@ -25,15 +25,15 @@ router.get('/:username', async (req, res) => {
 // * desc    creates a user
 // * route   POST /users
 router.post('/', async (req, res) => {
-    // * Validates the body of the request
+    // * Validates the body of the request, if there is an error it send it
     const { error } = validateUsers(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
 
     // * Checks if the username already exists
-    let usernameExists = await User.findOne({ username: req.body.username });
+    let usernameExists = await Users.findOne({ username: req.body.username });
     if (usernameExists) return res.status(400).send('Username already exist.');
 
-    const newUser = new User({...req.body});
+    const newUser = new Users({...req.body});
     const result = await newUser.save();
     res.status(200).send(result);
 });
@@ -41,12 +41,12 @@ router.post('/', async (req, res) => {
 // * desc    updates a user
 // * route   PUT /users/:username
 router.put('/:username', async (req, res) => {
-    // * Validates the body of the request
+    // * Validates the body of the request, if there is an error it send it
     const { error } = validateUsers(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
 
     // * Finds and updates the user returning the new modified document
-    const updatedUser = await User.findOneAndUpdate(
+    const updatedUser = await Users.findOneAndUpdate(
         { username: req.params.username }, 
         { $set: {...req.body} },
         { new: true }
@@ -61,7 +61,7 @@ router.put('/:username', async (req, res) => {
 // * desc    deletes a user
 // * route   DELETE /users/:username
 router.delete('/:username', async (req, res) => {
-    const deletedUser = await User.findOneAndDelete({username: req.params.username});
+    const deletedUser = await Users.findOneAndDelete({username: req.params.username});
 
     // * Checks if no user was found
     if(!deletedUser) return res.status(404).send(`The user ${req.params.username} was not found.`);

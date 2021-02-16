@@ -4,12 +4,15 @@
   "description": "REST API",
   "main": "server.js",
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "verbose": true,
+    "watchAll": true,
+    "detectOpenHandles": true
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node server",
     "dev": "cross-env NODE_ENV=development nodemon server",
-    "test": "cross-env NODE_ENV=testing jest --watchAll --detectOpenHandles"
+    "test": "cross-env NODE_ENV=testing jest"
   },
   "repository": {
     "type": "git",
