@@ -6,6 +6,8 @@ const express = require('express');
 const connectDB = require('./config/db');
 const bodyParser = require('body-parser');
 const errors = require('./error-handling/errors');
+const helmet = require('helmet');
+const compression = require('compression');
 
 // * Load config
 dotenv.config({ path: './config/.env' })
@@ -43,8 +45,14 @@ app.use(require('./middleware/check-DB'));
 // * routes
 app.use('/users', require('./routes/users'));
 
-// *error handling
+// * error handling
 app.use(errors);
+
+// * Production only 
+if(process.env.NODE_ENV === 'production'){
+    app.use(helmet());
+    app.use(compression());
+}
 
 const PORT  = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
