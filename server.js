@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 const winston = require('winston');
 require('winston-mongodb');
 require('express-async-errors');
+const cors = require('cors');
 const express = require('express');
 const connectDB = require('./config/db');
 const bodyParser = require('body-parser');
@@ -41,6 +42,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(require('./middleware/check-DB'));
+app.use(cors());
 
 // * routes
 app.use('/users', require('./routes/users'));
