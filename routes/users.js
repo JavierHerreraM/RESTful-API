@@ -17,7 +17,7 @@ router.get('/:username', async (req, res) => {
     const user = await Users.findOne({username: req.params.username}).lean();
 
     // * Checks if there is no user
-    if(!user) return res.status(404).send(`The user ${req.params.username} was not found.`);
+    if(!user) return res.status(404).send(`The username ${req.params.username} was not found.`);
 
     res.status(200).send(user);
 });
@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
 
     // * Checks if the username already exists
     let usernameExists = await Users.findOne({ username: req.body.username });
-    if (usernameExists) return res.status(400).send('Username already exist.');
+    if (usernameExists) return res.status(400).send('The username already exists.');
 
     const newUser = new Users({...req.body});
     const result = await newUser.save();
@@ -45,6 +45,10 @@ router.put('/:username', async (req, res) => {
     const { error } = validateUsers(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
 
+    // * Checks if the username already exists
+    let usernameExists = await Users.findOne({ username: req.body.username });
+    if (usernameExists) return res.status(400).send('The username already exists.');
+
     // * Finds and updates the user returning the new modified document
     const updatedUser = await Users.findOneAndUpdate(
         { username: req.params.username }, 
@@ -53,7 +57,7 @@ router.put('/:username', async (req, res) => {
     ).lean();
 
     // * Checks if no user was found
-    if(!updatedUser) return res.status(404).send(`The user ${req.params.username} was not found.`);
+    if(!updatedUser) return res.status(404).send(`The username ${req.params.username} was not found.`);
 
     res.status(200).send(updatedUser);
 });
@@ -64,7 +68,7 @@ router.delete('/:username', async (req, res) => {
     const deletedUser = await Users.findOneAndDelete({username: req.params.username});
 
     // * Checks if no user was found
-    if(!deletedUser) return res.status(404).send(`The user ${req.params.username} was not found.`);
+    if(!deletedUser) return res.status(404).send(`The username ${req.params.username} was not found.`);
 
     res.status(200).send(deletedUser);
 });

@@ -15,11 +15,11 @@ module.exports = async (req, res, next) => {
             randomNumber = Math.floor(Math.random() * (80 - 18 + 1) + 18);
             newUsers.push(
                 {
-                    "username": `username${i}`,
-                    "firstName": `firstName${i}`,
-                    "lastName": `lastName${i}`,
+                    "username": `Username${i}`,
+                    "firstName": `First name${i}`,
+                    "lastName": `Last name${i}`,
                     "age": randomNumber,
-                    "mail": `email${i}@mail.com`
+                    "email": `email${i}@mail.com`
                 }
             );
         }

@@ -8,7 +8,7 @@ describe('User validation', () => {
                 firstName: "firstName",
                 lastName: "lastName",
                 age: 18,
-                mail: "something@mail.com"
+                email: "something@mail.com"
             }
         );
 
@@ -17,7 +17,7 @@ describe('User validation', () => {
         expect(result.value).toHaveProperty("firstName");
         expect(result.value).toHaveProperty("lastName");
         expect(result.value).toHaveProperty("age");
-        expect(result.value).toHaveProperty("mail");
+        expect(result.value).toHaveProperty("email");
     });
     
     it('should return an error object if the validation fails', () => {
