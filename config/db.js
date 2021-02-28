@@ -9,10 +9,18 @@ const connectDB = async () => {
      };
     try {
         let connection;
-        if(process.env.NODE_ENV === 'testing') {
-            connection = await mongoose.connect(process.env.LOCAL_MONGO_URI, options);
-        } else {
-            connection = await mongoose.connect(process.env.MONGO_URI, options);
+        switch (process.env.NODE_ENV) {
+            case 'production':
+                connection = await mongoose.connect(process.env.MONGO_URI, options);
+                break;
+            case 'development':
+                connection = await mongoose.connect(process.env.LOCAL_MONGO_URI, options);
+                break;
+            case 'testing':
+                connection = await mongoose.connect(process.env.TEST_MONGO_URI, options);
+                break;
+            default:
+                break;
         }
         console.log(`MongoDB connected: ${connection.connection.host}`);
     } catch (error) {

@@ -31,8 +31,9 @@ Inside the .env file create the following variables:
 
 ```
 PORT = The local host in which you want to open the app
-MONGO_URI = Mongodb connection string
-LOCAL_MONGO_URI = A local mongodb connection string
+MONGO_URI = Mongodb connection string - use for production
+LOCAL_MONGO_URI = A local mongodb connection string - use for development
+TEST_MONGO_URI = A local mongodb connection string - use for doing tests
 ```
 
 ## Usage
@@ -42,13 +43,14 @@ Request: GET
 
 Route: https://jh-endpoint-api.herokuapp.com/users
 
-Does a GET request that searches for all users and returns a 200 status code and an array of users. Each user object has five properties: username, firstName, lastName, age, and email.
+Does a GET request that searches for all users and returns a 200 status code and an array of users. Each user object has six properties: _id, username, firstName, lastName, age, and email.
 
 Response example:
 
 ```
 [
     {
+        "_id": "603b213f722b51001cc0da8f",
         "username": "Username1",
         "firstName": "First name1",
         "lastName": "Last name1",
@@ -56,6 +58,7 @@ Response example:
         "email": "email1@mail.com"
     },
     {
+        "_id": "603b213f722b51001cc0da8f",
         "username": "Username2",
         "firstName": "First name2",
         "lastName": "Last name2",
@@ -78,12 +81,13 @@ Request: GET
 
 Route: https://jh-endpoint-api.herokuapp.com/users/Username1
 
-Does a GET request that searches for a user with the given username and returns a 200 status code and the found user object. The returned user object has five properties: username, firstName, lastName, age, and email.
+Does a GET request that searches for a user with the given username and returns a 200 status code and the found user object. The returned user object has six properties: _id, username, firstName, lastName, age, and email.
 
 Response example:
 
 ```
 {
+    "_id": "603b213f722b51001cc0da8f",
     "username": "Username1",
     "firstName": "First name1",
     "lastName": "Last name1",
@@ -109,7 +113,7 @@ Does a POST request that creates a new user, it returns a 200 status code and th
 
 The body of the request has five fields: username, firstName, lastName, age, and email.
 
-The username must be alphanumeric and unique, the field is case sensitive; it requires the username, firstName, and lastName fields; age must be greater than 0 and the email must have an email format.
+The username must be alphanumeric and unique, username is case sensitive; it requires the username, firstName, and lastName fields; age must be greater than 0 and the email must have an email format.
 
 Request body example:
 
@@ -127,6 +131,7 @@ Response example:
 
 ```
 {
+    "_id": "603b213f722b51001cc0da8f",
     "username": "username1",
     "firstName": "example1",
     "lastName": "example1",
@@ -175,6 +180,7 @@ Response example:
 
 ```
 {
+    "_id": "603b213f722b51001cc0da8f",
     "username": "Username1",
     "firstName": "name changed",
     "lastName": "last name changed",

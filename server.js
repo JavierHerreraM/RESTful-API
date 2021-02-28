@@ -42,8 +42,10 @@ const app = express();
 // * middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(require('./middleware/check-DB'));
 app.use(cors());
+if (process.env.NODE_ENV !== 'testing') {
+    app.use(require('./middleware/check-DB'));
+}
 
 // * routes
 app.use('/users', require('./routes/users'));

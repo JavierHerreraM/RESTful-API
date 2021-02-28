@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     // * Validates the body of the request, if there is an error it send it
     const { error } = validateUsers(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
-
+    
     // * Checks if the username already exists
     let usernameExists = await Users.findOne({ username: req.body.username });
     if (usernameExists) return res.status(400).send('The username already exists.');
@@ -47,7 +47,8 @@ router.put('/:username', async (req, res) => {
 
     // * Checks if the username already exists
     let usernameExists = await Users.findOne({ username: req.body.username });
-    if (usernameExists) return res.status(400).send('The username already exists.');
+    // * Checks if the user is in the database and if it is different from the one It was already utilizing
+    if (usernameExists && usernameExists.username !== req.params.username) return res.status(400).send('The username already exists.');
 
     // * Finds and updates the user returning the new modified document
     const updatedUser = await Users.findOneAndUpdate(
