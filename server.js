@@ -11,7 +11,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 
 // * Load config
-dotenv.config({ path: './config/.env' })
+dotenv.config({ path: './config/.env' });
 
 // * Add winston transporters for mongoDB, file(in case of ENV=production) and console for all ENV
 if(process.env.NODE_ENV === 'production') {
@@ -26,7 +26,8 @@ if(process.env.NODE_ENV === 'production') {
         handleExceptions: true,
         handleRejections: true
       }));
-}
+};
+
 winston.add(new winston.transports.Console({
     format: winston.format.simple(),
     handleExceptions: true,
@@ -54,11 +55,11 @@ app.use(errors);
 if(process.env.NODE_ENV === 'production'){
     app.use(helmet());
     app.use(compression());
-}
+};
 
 const PORT  = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
     console.log(`App open in port: ${PORT}`);
-})
+});
 
 module.exports = server;

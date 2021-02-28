@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
         let newUsers = [];
         let randomNumber = 0;
 
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 10; i > 0; i++) {
 
             // * Creates a random number for the age
             randomNumber = Math.floor(Math.random() * (80 - 18 + 1) + 18);
@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
         }
 
         await Users.collection.insertMany(newUsers);
-    }
+    };
 
     next();
-}
+};

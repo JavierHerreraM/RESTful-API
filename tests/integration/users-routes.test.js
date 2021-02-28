@@ -19,20 +19,20 @@ function getReqBody(p1, p2) {
                 "lastName": `lastName${p2}`
             }
         ];
-    }
+    };
     if (p1) {
         return {
             "username": `username${p1}`,
             "firstName": `firstName${p1}`,
             "lastName": `lastName${p1}`
         };
-    }
+    };
     return {
         "username": "username",
         "firstName": "firstName",
         "lastName": "lastName"
-    }
-}
+    };
+};
 
 // * All the tests for the route: /users
 describe('Route: /users', () => {

@@ -14,6 +14,6 @@ function validateUser(user) {
     return schema.validate(user, {
         abortEarly: true
     });
-}
+};
 
 module.exports = validateUser;
